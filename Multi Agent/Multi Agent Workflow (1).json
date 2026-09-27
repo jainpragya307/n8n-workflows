@@ -1,0 +1,230 @@
+{
+  "name": "Multi Agent Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -256,
+        -112
+      ],
+      "id": "24a0fe14-19a8-496d-80eb-8386b394d13c",
+      "name": "When chat message received",
+      "webhookId": "b953e654-cdee-47ea-9669-93f5ee76ffe6"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }} ",
+        "options": {
+          "systemMessage": "You are the Main Business Research Assistant.\n\nThe user will provide a complete business request in the User Message.\n\nYour job is to research the request and produce a final practical report.\n\nIMPORTANT:\n- Do not ask the user to fill out a questionnaire.\n- Do not ask for information that is already present in the user's request.\n- Do not ask for permission before using the research tools.\n- Immediately use BOTH available research tools:\n  1. Competitor Search\n  2. Market Research Agent\n- Send the complete user request to both tools.\n- Wait for their research results.\n- Combine the results into one final answer.\n\nThe final report should include:\n\n1. Business Idea Overview\n2. User Requirements\n3. Market Research\n4. Competitor Analysis\n5. Competitor Comparison\n6. Market Gaps & Opportunities\n7. Suitable Business Approach\n8. Budget Considerations\n9. Suggested Facilities & Services\n10. Target Customer Strategy\n11. Key Risks & Considerations\n12. Key Insights\n13. Sources\n\nIf some information is missing, continue with the available information and clearly mention the limitation.\n\nDo not invent facts, statistics, prices, competitors, or sources.\n\nYour first action should be to use the available research tools, not to ask the user questions."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -32,
+        -112
+      ],
+      "id": "4ca45af5-42ed-4022-b080-4311128e51d0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        96
+      ],
+      "id": "7d70df79-8d23-4eb4-b212-bda8955f2bff",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        16,
+        96
+      ],
+      "id": "9236995d-b759-43a3-8954-c511ce12af48",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to find and analyze competitors for the user's product, service, or business idea.\n\nSend the exact product or topic provided by the user.\n\nFind both direct and indirect competitors and provide competitor names, websites, products/services, pricing, target customers, features, and differentiating factors.\n\nUse this tool whenever competitor research is required.",
+        "workflowId": {
+          "__rl": true,
+          "value": "stNxLZ8hCSDdq1jo",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/stNxLZ8hCSDdq1jo",
+          "cachedResultName": "Competitor Search"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "competitor_input": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('competitor_input', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "competitor_input"
+          ],
+          "schema": [
+            {
+              "id": "competitor_input",
+              "displayName": "competitor_input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        96
+      ],
+      "id": "6c7c6d68-7ca1-4aa8-b89d-a2ad486cfde9",
+      "name": "Call 'Competitor Search'"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to perform market research for the user's product, service, or business idea.\n\nSend the exact product or topic provided by the user.\n\nResearch the market overview, target customers, customer needs, market trends, pricing, demand, and market opportunities.\n\nUse this tool whenever market research is required.",
+        "workflowId": {
+          "__rl": true,
+          "value": "9auhzgEBmcYeGND2",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/9auhzgEBmcYeGND2",
+          "cachedResultName": "Market Research Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_input": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('research_input', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "research_input"
+          ],
+          "schema": [
+            {
+              "id": "research_input",
+              "displayName": "research_input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        96
+      ],
+      "id": "d3749eb8-ca89-450e-80cb-67802b5afe12",
+      "name": "Call 'Market Research Agent'"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Competitor Search'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Market Research Agent'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b4171857-d214-456b-abd2-596c90cf7e85",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "KUk6hEpePdbZ5r6z",
+  "tags": []
+}

@@ -1,0 +1,92 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -112,
+        -16
+      ],
+      "id": "924a83e2-1002-4cf3-9f7e-4054d1895b36",
+      "name": "When chat message received",
+      "webhookId": "54d94d94-2391-4cee-bc89-ba11521e1647"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "9c98e178-e446-4fd7-9ad7-ad70a7eb8acc",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.6-27b",
+        "options": {
+          "maxTokensToSample": 500
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        32,
+        160
+      ],
+      "id": "9275afb0-d7a1-40c7-852b-e2ef948c3638",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "926kcexDWmu1Kzq6",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b52f5c93-e082-4a6a-981b-65bc1b6e6c60",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "73aa68bfa027a4ce196c4a1e3d70b20546984aea2be56b9bfacec9291bc38aa5"
+  },
+  "nodeGroups": [],
+  "id": "ajS7TagDliICnfiZ",
+  "tags": []
+}

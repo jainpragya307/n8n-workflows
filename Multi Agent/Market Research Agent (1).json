@@ -1,0 +1,137 @@
+{
+  "name": "Market Research Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "research_input"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        -96
+      ],
+      "id": "a460af87-014d-470b-83e7-55a8fcc0a4cf",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "= {{ $json.research_input }}",
+        "options": {
+          "systemMessage": "You are a Market Research Agent.\n\nYou receive a complete business request from the Main Workflow.\n\nUse the information provided in research_input to perform market research immediately.\n\nDo not ask the user for additional information if the request already contains enough details. Do not create an intake questionnaire.\n\nResearch:\n- Market overview\n- Target customers\n- Customer needs\n- Market trends\n- Pricing\n- Demand\n- Market opportunities\n- Relevant business considerations\n- Sources\n\nUse the business location, budget, facilities, target customers, and other requirements from the request.\n\nIf some information is missing, continue using the available information and clearly state the limitation.\n\nDo not invent facts, statistics, prices, or sources.\n\nReturn only the structured market research result to the Main Workflow."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "4a3a3d6a-4b8e-4acf-9718-657bc68307d3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -32,
+        128
+      ],
+      "id": "f93011e0-f19c-4f2c-9765-a8f38f72c037",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "additionalParameters": {}
+      },
+      "type": "@brave/n8n-nodes-brave-search.braveSearchTool",
+      "typeVersion": 1.1,
+      "position": [
+        304,
+        128
+      ],
+      "id": "a2d9fd62-371a-450f-8a37-78a3f2307671",
+      "name": "Brave Search",
+      "credentials": {
+        "braveSearchApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brave Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "78d052d7-70af-407a-beae-37c0e1f17807",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "9auhzgEBmcYeGND2",
+  "tags": []
+}

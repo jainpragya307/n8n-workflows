@@ -1,0 +1,300 @@
+{
+  "name": "AI MEETING TO ACTION",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d357fba8-71ab-481b-8bf3-8c3aa2900a2a",
+              "name": "meeting_notes",
+              "value": "Meeting with ABC Technologies.  Rahul will prepare the AI training proposal by Friday. Priya will schedule the client demo for Monday at 11 AM. Dhruv will send the pricing details to Rahul today. The team will review the proposal in the next meeting.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        0
+      ],
+      "id": "7a73ff6c-40d5-40b3-b8d9-efe0605082cb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        0
+      ],
+      "id": "d9183805-9d60-4c44-874e-5230808dbff1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the meeting notes below.\n\nMeeting Notes: {{ $json.meeting_notes }}\nIdentify: 1. Every action item 2. Responsible person 3. Deadline if\nmentioned 4. Important follow-up\n\nDo not invent missing information.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "2a60546c-5aa2-4c88-bf9f-5ec30278ad40",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        208
+      ],
+      "id": "a723760c-94c1-45d6-a3f7-18162abfc20b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{ \"meetingSummary\": \"Meeting with ABC Technologies about AI training.\", \"actionItems\": [ { \"task\": \"Prepare AI training proposal\", \"owner\": \"Rahul\", \"deadline\": \"Friday\" }, { \"task\": \"Schedule client demo\", \"owner\": \"Priya\", \"deadline\": \"Monday 11 AM\" }, { \"task\":\n\"Send pricing details\", \"owner\": \"Dhruv\", \"deadline\": \"Today\" } ] }"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        208
+      ],
+      "id": "a73a756c-2227-4de8-bb04-9d5725dc283f",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.actionItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        560,
+        0
+      ],
+      "id": "eb6fa5b7-eb71-4df0-ac5b-35b8cdd7b19f",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ",
+          "mode": "list",
+          "cachedResultName": "AI Business Operations Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 453673599,
+          "mode": "list",
+          "cachedResultName": "Meetings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ/edit#gid=453673599"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Owner": "={{ $json.owner }}",
+            "Status": "Pending",
+            "Meeting Title": "=AI Training Meeting",
+            "Meeting Date": "={{ $now }}",
+            "Action Item": "={{ $json.task }}",
+            "Deadline": "={{ $json.deadline }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Meeting Date",
+              "displayName": "Meeting Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Meeting Title",
+              "displayName": "Meeting Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Action Item",
+              "displayName": "Action Item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Deadline",
+              "displayName": "Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        0
+      ],
+      "id": "bee4e711-8eb6-4424-886b-931e2c28a804",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v1Bw6432ZsvB3dQA",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e34bf989-9a4a-43f3-bf8d-92250ca6c8b1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "MSED9kPeRPPmFyke",
+  "tags": []
+}

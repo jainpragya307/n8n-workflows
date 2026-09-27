@@ -1,0 +1,520 @@
+{
+  "name": "AI BUSINESS RESEARCH / MULTI-AGENT",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        -16
+      ],
+      "id": "dd100f50-af96-469f-a2b1-c936f4e51555",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a4edf7a-274f-4fe0-a9f6-ca9b717dafdc",
+              "name": "research_request",
+              "value": "Research the corporate AI training market in Gujarat. Analyze market demand, major competitors, customer requirements, pricing patterns, and opportunities for Govardhan Institute.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -448,
+        -16
+      ],
+      "id": "cb0c78ab-af7d-4527-8289-24c845679779",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -400,
+        176
+      ],
+      "id": "8ad0d536-aab4-4be3-9ce4-9580dc41530d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "cZBx1ppOAbcFaqaK",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/cZBx1ppOAbcFaqaK",
+          "cachedResultName": "MARKET RESEARCH SPECIALIST"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_request": "={{ $json.research_request }}"
+          },
+          "matchingColumns": [
+            "research_request"
+          ],
+          "schema": [
+            {
+              "id": "research_request",
+              "displayName": "research_request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -224,
+        176
+      ],
+      "id": "d295bb3c-ec2f-4cef-9ec5-da370ee729d5",
+      "name": "Call 'MARKET RESEARCH SPECIALIST'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "ojLUxylCa3IaDy4E",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/ojLUxylCa3IaDy4E",
+          "cachedResultName": "CUSTOMER RESEARCH SPECIALIST"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_request": "={{ $json.research_request }}"
+          },
+          "matchingColumns": [
+            "research_request"
+          ],
+          "schema": [
+            {
+              "id": "research_request",
+              "displayName": "research_request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        176
+      ],
+      "id": "8f13d08f-9702-4bf9-b3fa-b00866fd05da",
+      "name": "Call 'CUSTOMER RESEARCH SPECIALIST'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "vW0ey6WWcfLqkHbE",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/vW0ey6WWcfLqkHbE",
+          "cachedResultName": "COMPETITOR RESEARCH SPECIALIST"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_request": "={{ $json.research_request }}"
+          },
+          "matchingColumns": [
+            "research_request"
+          ],
+          "schema": [
+            {
+              "id": "research_request",
+              "displayName": "research_request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -64,
+        176
+      ],
+      "id": "1ea81d7f-c9f3-4f70-a5a9-925548aad7cc",
+      "name": "Call 'COMPETITOR RESEARCH SPECIALIST'"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Review the research report provided below.\n\nResearch Report:{{ $json.output }}\n\nCheck:\n- Unsupported claims\n- Missing evidence\n- Contradictions\n- Excessive assumptions\n- Important missing information\n\nIf the report contains useful research and there are no major problems, set approvedForHumanReview to true.\n\nReturn:\napprovedForHumanReview\nissues\nfinalReport\n\nDo not invent or rewrite facts without evidence.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        256,
+        -16
+      ],
+      "id": "8799a694-9a6c-4bd3-be8b-47c1a334c12c",
+      "name": "Reviewer AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        176
+      ],
+      "id": "b850fbeb-7719-43ab-8112-410e172a7a81",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "pragyaajain20@gmail.com",
+        "subject": "AI Business Research — Human Review Required",
+        "message": "=A new AI Business Research report is ready for human review.\n\nPlease review the report, findings, issues, and recommendations before taking any business action.\n\nReviewer Output:\n\n{{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        -16
+      ],
+      "id": "b3dd6bd2-d377-4eb9-a5f4-73c5d54eab4e",
+      "name": "Send a message",
+      "webhookId": "cd86616e-7331-4934-b83c-d8782e9b8b93",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "wvrBj1ESpUfpsNhV",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ",
+          "mode": "list",
+          "cachedResultName": "AI Business Operations Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 783547276,
+          "mode": "list",
+          "cachedResultName": "Research",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ/edit#gid=783547276"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Research ID": "={{ $execution.id }}",
+            "Date": "={{ $now }}",
+            "Company": "=Govardhan Institute",
+            "Market Findings": "specialist market result",
+            "Competitor Findings": "specialist competitor result",
+            "Customer Findings": "specialist customer result",
+            "Final Report": "={{ $('Reviewer AI Agent1').item.json.output }}",
+            "Status": "Pending Human Review"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Research ID",
+              "displayName": "Research ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Market Findings",
+              "displayName": "Market Findings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Competitor Findings",
+              "displayName": "Competitor Findings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer Findings",
+              "displayName": "Customer Findings",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Report",
+              "displayName": "Final Report",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        848,
+        -16
+      ],
+      "id": "6d8eb587-6d27-4be6-b6d4-0ed2b865ae9b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v1Bw6432ZsvB3dQA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are the Supervisor Research Agent.\n\nResearch request:  {{ $json.research_request }}\n\nDelegate research to specialist agents.\n\nSpecialists: \n- Market Agent: market trends and demand \n-Competitor Agent: competitors and offerings - Customer Agent: customer needs and\nbuying factors\n\nRules: \n- Maximum 3 searches per specialist. \n- Keep findings concise. \n- Do not invent facts. \n- Clearly identify uncertainty. \n- Combine findings into one report.\n\nFinal report structure: \n1. Executive Summary 2. Market Findings \n3.Competitor Findings 4. Customer Findings 5. Opportunities 6. Risks / Unknowns \n7. Further Research Questions",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "caad3ba3-96fa-4238-94ae-b67c71477b34",
+      "name": "Supervisor AI Agent"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Supervisor AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Supervisor AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'MARKET RESEARCH SPECIALIST'": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'CUSTOMER RESEARCH SPECIALIST'": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'COMPETITOR RESEARCH SPECIALIST'": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reviewer AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reviewer AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supervisor AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Reviewer AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3c7f73f8-a3f4-4382-ad40-853f29261939",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "fUFDJTmw39KRdPpC",
+  "tags": []
+}

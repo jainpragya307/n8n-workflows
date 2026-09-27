@@ -1,0 +1,510 @@
+{
+  "name": "Market Research Agent 1.0",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -496,
+        -64
+      ],
+      "id": "58f57711-d79c-4f2f-a784-4788f72f88bb",
+      "name": "When chat message received",
+      "webhookId": "76a5c852-6cda-448a-9009-63cdcd4cf605"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the Supervisor Agent for a business research team.\n\nDelegate only the work that is required.\n\nSpecialists:\n1. Market Research Agent: market demand, trends, industry information, statistics.\n2. Competitor Research Agent: competitors, locations, products, pricing, online presence.\n3. Customer Research Agent: target customers, preferences, pain points, price sensitivity.\n\nRules:\n- Use the appropriate specialist.\n- If the request needs multiple research areas, call the required specialists.\n- Do not repeat the same specialist.\n- Do not perform detailed research yourself when a specialist is available.\n- Keep requests concise.\n- Ask specialists for maximum 5 findings and maximum 3 important sources.\n- Combine results only after specialist research is complete."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -272,
+        -64
+      ],
+      "id": "035f7f61-ab65-495d-b63b-b4767b66b9f1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -480,
+        144
+      ],
+      "id": "66145f28-1197-45e1-bb44-cd1f7aed977a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to research market demand, trends,\nindustry information, statistics, and opportunities for the user’s\nbusiness idea.",
+        "workflowId": {
+          "__rl": true,
+          "value": "hFR7EtAwlh0XbkO1",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/hFR7EtAwlh0XbkO1",
+          "cachedResultName": "Market Research Agent part-2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_request": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('research_request', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "research_request"
+          ],
+          "schema": [
+            {
+              "id": "research_request",
+              "displayName": "research_request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        128
+      ],
+      "id": "669e8437-58eb-465e-bac2-b4813675eb50",
+      "name": "Call 'Market Research Agent part-2'"
+    },
+    {
+      "parameters": {
+        "description": "Research competitors, locations, products, services,\npricing, online presence, reviews, and differentiators.",
+        "workflowId": {
+          "__rl": true,
+          "value": "JVyDzb1PQR38zruZ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/JVyDzb1PQR38zruZ",
+          "cachedResultName": "Competitor Research Agent part-2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_request": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('research_request', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "research_request"
+          ],
+          "schema": [
+            {
+              "id": "research_request",
+              "displayName": "research_request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        128
+      ],
+      "id": "4e3a3889-573c-4f22-bbc0-b4f0d085e074",
+      "name": "Call 'Competitor Research Agent part-2'"
+    },
+    {
+      "parameters": {
+        "description": "esearch target customers, preferences, pain points, price\nsensitivity, and customer demand indicators.",
+        "workflowId": {
+          "__rl": true,
+          "value": "CVhbHmSR3A3HAxh7",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/CVhbHmSR3A3HAxh7",
+          "cachedResultName": "Customer Research Agent part-2"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "research_request": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('research_request', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "research_request"
+          ],
+          "schema": [
+            {
+              "id": "research_request",
+              "displayName": "research_request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        128
+      ],
+      "id": "20171220-dc37-49c3-86e5-878816c70095",
+      "name": "Call 'Customer Research Agent part-2'"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the research collected from the specialist agents:\n\n{{ $json.output }}\n\nCreate the final business research report using this information.",
+        "options": {
+          "systemMessage": "You are a Business Report Writer.\n\nUse only the research supplied by the specialist agents.\nDo not add unsupported facts or perform new research.\n\nCreate a concise report with these sections:\n\n1. Executive Summary\n2. Market Findings\n3. Competitor Findings\n4. Customer Findings\n5. Key Numbers\n6. Sources\n\nClearly identify numbers and keep the report concise."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        256,
+        -64
+      ],
+      "id": "08767676-bad9-4f30-9f43-eadf2748e9a1",
+      "name": "Report Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        128
+      ],
+      "id": "f91f0a0d-a498-4c3e-aeb0-5dd2d898beb5",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Review this business research report:\n\n{{ $json.output }}",
+        "options": {
+          "systemMessage": "You are a report quality reviewer.\n\nReview the business research report.\n\nCheck:\n1. Are claims supported by the supplied research?\n2. Are important sections missing?\n3. Are there contradictions?\n4. Are numbers clearly identified?\n5. Are sources present?\n\nReturn only:\n\nPASS\n\nor\n\nREVISE\n- Correction 1\n- Correction 2\n- Correction 3\n- Correction 4\n- Correction 5\n\nDo not rewrite the entire report."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        624,
+        -48
+      ],
+      "id": "cbd6981a-752b-4af6-8c52-bd81da03f459",
+      "name": "Reviewer Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        128
+      ],
+      "id": "a638e5b4-7015-4627-8a90-c08f5f1f5379",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "pragyaajain20@gmail.com",
+        "subject": "Coffee Shop Business Research Report - Approval Required",
+        "message": "=Please review the business research report below.\n\n{{ $json.output }}\n\nApprove this report for delivery?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        -48
+      ],
+      "id": "e9a2f19f-2025-4159-a2b3-f3ef8a639be6",
+      "name": "Send message and wait for response",
+      "webhookId": "3b2dd073-bf3a-4b7e-9801-99709437816d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "wvrBj1ESpUfpsNhV",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "47818415-a3e2-485f-b1eb-b03505548890",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1216,
+        -48
+      ],
+      "id": "7f233202-e852-4b64-8bca-a03ff5865b09",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "pragyaajain20@gmail.com",
+        "subject": "Approved Business Research Report - Coffee Shop Surat",
+        "emailType": "text",
+        "message": "=The business research report has been approved.  {{ $('Report Agent').item.json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        -77.06383430808785
+      ],
+      "id": "691652cd-5f9f-4e89-a433-098084f0e7fc",
+      "name": "Send a message",
+      "webhookId": "7306087e-804f-42bf-a982-32bc2485b0bc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "wvrBj1ESpUfpsNhV",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Market Research Agent part-2'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Competitor Research Agent part-2'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Customer Research Agent part-2'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Report Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Report Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report Agent": {
+      "main": [
+        [
+          {
+            "node": "Reviewer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reviewer Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reviewer Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "43465d18-f142-44d7-ab8c-060e0155480f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "N26AWW0ooznIbVPz",
+  "tags": []
+}

@@ -1,0 +1,315 @@
+{
+  "name": "AI LEAD QUALIFICATION",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-lead ",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        -160
+      ],
+      "id": "ecc8f911-b4c4-4f22-bc98-b63888eff51f",
+      "name": "Webhook",
+      "webhookId": "0e324596-a7ff-44af-8c8f-983756bf40ef"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this incoming business lead.\n\nLead:\nName : {{ $json.body.name }}\nCompany : {{ $json.body.company }}\nEmail : {{ $json.body.email }}\nRequirement : {{ $json.body.requirement }}\nBudget : {{ $json.body.budget }}\n\nDetermine:\n1. Qualification\n2. Priority\n\nRules:\n- Strong requirement + identifiable company + budget = Qualified\n- Missing important information = Needs Information\n- Clearly irrelevant = Unqualified\n- Do not invent information.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        -160
+      ],
+      "id": "4b17b417-95f1-4dc8-8087-a40683ef8415",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        16
+      ],
+      "id": "f1ea3487-2c52-44dc-9b16-51294c6b06fa",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{ \"name\": \"Rahul Patel\",\n\"company\": \"ABC Technologies\", \n\"email\": \"rahul@abctech.com\",\n\"requirement\": \"Corporate AI training for 250 employees\", \n\"budget\":200000, \n\"qualification\": \"Qualified\",\n\"priority\": \"High\" }"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        16
+      ],
+      "id": "c77313b1-da04-445f-802e-6ea6c48ac90f",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ",
+          "mode": "list",
+          "cachedResultName": "AI Business Operations Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 899614145,
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j0G7CNZ7fUI0moC2sYFTXnWB5C6C4j5MP5UrpluWIEQ/edit#gid=899614145"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.output.name }}",
+            "Company": "={{ $json.output.company }}",
+            "Email": "={{ $json.output.email }}",
+            "Requirement": "={{ $json.output.requirement }}",
+            "Budget": "={{ $json.output.budget }}",
+            "Qualification": "={{ $json.output.qualification }}",
+            "Priority": "={{ $json.output.priority }}",
+            "Status": "Pending Approval",
+            "Date": "={{ $now }}",
+            "Lead ID": "={{ $execution.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead ID",
+              "displayName": "Lead ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Requirement",
+              "displayName": "Requirement",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Qualification",
+              "displayName": "Qualification",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        272,
+        -160
+      ],
+      "id": "beae790f-1114-4d60-8717-bb37972a5283",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "v1Bw6432ZsvB3dQA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "pragyaajain20@gmail.com",
+        "subject": "=Lead Approval Required — {{ $('AI Agent').item.json.output.company }}",
+        "message": "=A new lead requires review.  \nCompany: {{ $('AI Agent').item.json.output.company }}\nRequirement: {{ $('AI Agent').item.json.output.requirement }}\nBudget:  {{ $('AI Agent').item.json.output.budget }} \nQualification: {{ $('AI Agent').item.json.output.qualification }}\nPlease review before sales follow-up.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        -144
+      ],
+      "id": "ae7e5bc3-7564-41f4-b7af-b81089e2fbae",
+      "name": "Send a message",
+      "webhookId": "92adf159-f0f3-4915-89b0-6292740218c6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "wvrBj1ESpUfpsNhV",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "dda0abe7-f857-4135-8d52-26cbd65f95cb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "bNPY5RlEvu3KVt4J",
+  "tags": []
+}

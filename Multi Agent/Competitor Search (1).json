@@ -1,0 +1,137 @@
+{
+  "name": "Competitor Search",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "competitor_input"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        -96
+      ],
+      "id": "2c478c80-8acf-4703-898d-079deadb371f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.competitor_input }}",
+        "options": {
+          "systemMessage": "You are a Competitor Research Agent.\n\nYou receive a complete business request from the Main Workflow.\n\nUse the information provided in competitor_input to perform competitor research immediately.\n\nDo not ask the user for additional information if the request already contains enough details. Do not create an intake questionnaire.\n\nFind:\n- Direct competitors\n- Indirect competitors\n- Competitor names\n- Products/services\n- Pricing\n- Target customers\n- Facilities/features\n- Differentiating factors\n- Market gaps\n- Sources\n\nPrioritize competitors relevant to the location and business described by the user.\n\nIf some information is missing, continue using the available information and clearly state the limitation.\n\nDo not invent competitors, prices, features, statistics, or sources.\n\nReturn only the structured competitor research result to the Main Workflow."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "0b7bf789-ed10-44a9-8afd-1f9be7769456",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        112
+      ],
+      "id": "cb13d18f-90ed-492d-b1c3-f0556914549f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "additionalParameters": {}
+      },
+      "type": "@brave/n8n-nodes-brave-search.braveSearchTool",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        112
+      ],
+      "id": "b4d263ce-9d6f-4a65-9521-153a2807c102",
+      "name": "Brave Search",
+      "credentials": {
+        "braveSearchApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brave Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "23e1367b-6790-43c1-afad-49c136713cd5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e1b66547bbb3015d3c053148cbf53b7555121e7edd496f0b8c320a02e5bb8e64"
+  },
+  "nodeGroups": [],
+  "id": "stNxLZ8hCSDdq1jo",
+  "tags": []
+}

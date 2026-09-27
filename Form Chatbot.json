@@ -1,0 +1,104 @@
+{
+  "name": "Form Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AI Question Form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "Question",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ceaba557-127a-4879-9289-38151f74557b",
+      "name": "On form submission",
+      "webhookId": "2f610410-c4cf-4d97-b658-3324c8308602"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Answer the user's question clearly and in simple language.\n\nUser Name: {{$json.Name}}\n\nQuestion: {{$json.Question}}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "6d1834aa-46b9-4e17-946f-da9b08f11478",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.8-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        96,
+        208
+      ],
+      "id": "df6a4de1-fe24-4c6b-96c7-d593af14fabd",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "926kcexDWmu1Kzq6",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "bd78a9fc-66ab-4e78-9566-891c5f0e38db",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "73aa68bfa027a4ce196c4a1e3d70b20546984aea2be56b9bfacec9291bc38aa5"
+  },
+  "nodeGroups": [],
+  "id": "F8RVauwLdsspgatX",
+  "tags": []
+}
